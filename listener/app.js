@@ -4,7 +4,17 @@ const server = net.createServer((socket) => {
     console.log('Emitter connected');
 
     socket.on('data', (data) => {
-        console.log(`Received: ${data.toString()}`);
+        try {
+            const stream = data.toString();
+            const messages = stream.split('|');
+            console.log(`Length: ${messages.length}`);
+
+            messages.forEach((msg, index) => {
+                console.log(`Message ${index + 1}: ${msg}`);
+            })
+        }catch(err) {
+            console.log(`Process Err: ${err.message}`);
+        }
     });
 
     socket.on('error', (err) => {

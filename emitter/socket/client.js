@@ -1,4 +1,5 @@
 const net = require('net');
+const { generateMessages } = require('../utils/generator');
 
 function startClient() {
     const client = new net.Socket();
@@ -8,11 +9,11 @@ function startClient() {
 
             setInterval(() => {
                 try {
-                    const msg = "This is a test message...";
-
-                    client.write(msg);
+                    const msgs = generateMessages();
+                    const stream = msgs.join('|');
+                    client.write(stream);
                     
-                    console.log(`Message sent: ${msg}`);
+                    console.log(`Message sent: ${stream}`);
                 } catch(err) {
                     console.log(`Emitter Error: ${err.message}`);
                 }
