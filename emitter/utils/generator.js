@@ -12,16 +12,27 @@ function generateMessages() {
             const origin = getRandomElement(data.cities);
             const destination = getRandomElement(data.cities);
             const createdString = `${name}_${origin}_${destination}_${Date.now()}`;
-            const secretKey = crypto.createHash("sha256").update(createdString).digest("hex");
+            const secretKey = crypto.createHash("sha256").update(createdString).digest();
 
-            const message = {
+            const payload = {
                 name,
                 origin,
                 destination,
-                secretKey
+                secret_key: secretKey.toString('hex')
             };
 
-            messages.push(JSON.stringify(message));
+            const randomBytes = crypto.randomBytes(16);
+            const cipher = crypto.createCipheriv("aes-256-ctr", secretKey, randomBytes);
+
+            const encrypted = Buffer.concat([
+                cipher.update(JSON.stringify(payload)),
+                cipher.final()
+            ]);
+
+            const randomHex = randomBytes.toString("hex");
+            const encryptedHex = encrypted.toString("hex");
+
+            messages.push(randomHex + encryptedHex);
         }
         return messages;
     } catch (err) {
