@@ -10,7 +10,12 @@ const server = net.createServer((socket) => {
             console.log(`Length: ${messages.length}`);
 
             messages.forEach((msg, index) => {
-                console.log(`Message ${index + 1}: ${msg}`);
+                try {
+                    const obj = JSON.parse(msg);
+                    console.log(`Message ${index + 1}:`, obj);
+                }catch(err) {
+                    console.log(`JSON messages Error!!`);
+                }
             })
         }catch(err) {
             console.log(`Process Err: ${err.message}`);
