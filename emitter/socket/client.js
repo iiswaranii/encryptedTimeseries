@@ -17,7 +17,7 @@ function startClient() {
                 } catch(err) {
                     console.log(`Emitter Error: ${err.message}`);
                 }
-            }, 5000);
+            }, 10000);
         })
 
         client.on('error', (err) => {
